@@ -1,0 +1,320 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #1e293b;
+}
+
+/* HEADER */
+
+header {
+    background: #102a43;
+    color: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+}
+
+nav a:hover {
+    color: #38bdf8;
+}
+
+/* HOME */
+
+.hero {
+    min-height: 350px;
+    background: linear-gradient(120deg, #102a43, #147d92);
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 60px 8%;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.btn {
+    display: inline-block;
+    background: #fbbf24;
+    color: #102a43;
+    padding: 13px 22px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* DASHBOARD */
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    padding: 35px 5%;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    width: 220px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000010;
+}
+
+.stat-card h2 {
+    color: #087e8b;
+    font-size: 32px;
+}
+
+/* MAIN CONTAINERS */
+
+.container {
+    background: white;
+    max-width: 900px;
+    margin: 35px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000010;
+}
+
+.container h2 {
+    margin-bottom: 20px;
+    color: #102a43;
+}
+
+/* MULTI STEP INDICATOR */
+
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0;
+    text-align: center;
+    gap: 10px;
+}
+
+.step {
+    flex: 1;
+    color: #94a3b8;
+}
+
+.step span {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    margin-bottom: 8px;
+}
+
+.step.active {
+    color: #087e8b;
+    font-weight: bold;
+}
+
+.step.active span {
+    background: #087e8b;
+    color: white;
+}
+
+.step.completed span {
+    background: #16a34a;
+    color: white;
+}
+
+.step.completed {
+    color: #16a34a;
+}
+
+.step p {
+    font-size: 13px;
+}
+
+/* FORM */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-step {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-step[hidden] {
+    display: none !important;
+}
+
+.form-step h3 {
+    margin-bottom: 10px;
+    color: #102a43;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #087e8b;
+}
+
+/* BUTTONS */
+
+button {
+    padding: 13px;
+    background: #087e8b;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #075e68;
+}
+
+.step-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.step-buttons button {
+    flex: 1;
+}
+
+/* SUCCESS MESSAGE */
+
+#message, #trackResult {
+    margin-top: 15px;
+    line-height: 1.8;
+}
+
+.success-box {
+    background: #ecfdf5;
+    border: 1px solid #86efac;
+    padding: 20px;
+    border-radius: 10px;
+    color: #166534;
+}
+
+.success-box h3 {
+    margin-bottom: 10px;
+}
+
+/* TABLE */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 13px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #102a43;
+    color: white;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.priority {
+    font-weight: bold;
+    color: #dc2626;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    background: #102a43;
+    color: white;
+    padding: 22px;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media(max-width: 600px) {
+
+    header {
+        flex-direction: column;
+    }
+
+    nav {
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .container {
+        margin: 20px 12px;
+        padding: 20px;
+    }
+
+    .step-indicator {
+        gap: 3px;
+    }
+
+    .step p {
+        font-size: 11px;
+    }
+
+    .step-buttons {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicTrack - Smart Complaint System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">🏙️ CivicTrack</div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#report">Report Issue</a>
+        <a href="#track">Track Complaint</a>
+        <a href="#admin">Dashboard</a>
+    </nav>
+</header>
+
+<!-- HOME -->
+<section class="hero" id="home">
+    <div>
+        <h1>Make Your City Better</h1>
+        <p>Report public problems. Track progress.
+           Build a smarter and cleaner city.</p>
+        <a href="#report" class="btn">Report a Complaint</a>
+    </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="stats" id="admin">
+
+    <div class="stat-card">
+        <h2 id="total">0</h2>
+        <p>Total Complaints</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="pending">0</h2>
+        <p>Pending</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="resolved">0</h2>
+        <p>Resolved</p>
+    </div>
+
+</section>
+
+<!-- MULTI STEP COMPLAINT FORM -->
+<section class="container" id="report">
+
+    <h2>Report a Complaint</h2>
+
+    <div class="step-indicator">
+
+        <div class="step active" id="step1Indicator">
+            <span>1</span>
+            <p>Personal Details</p>
+        </div>
+
+        <div class="step" id="step2Indicator">
+            <span>2</span>
+            <p>Problem Details</p>
+        </div>
+
+        <div class="step" id="step3Indicator">
+            <span>3</span>
+            <p>Submit</p>
+        </div>
+
+    </div>
+
+    <form id="complaintForm">
+
+        <!-- STEP 1 -->
+        <div class="form-step" id="step1">
+
+            <h3>Personal Details</h3>
+
+            <input id="name" type="text"
+                placeholder="Your Name" required>
+
+            <select id="category" required>
+                <option value="">Select Category</option>
+                <option>Road Damage</option>
+                <option>Garbage</option>
+                <option>Water Leakage</option>
+                <option>Streetlight</option>
+                <option>Drainage</option>
+            </select>
+
+            <button type="button" onclick="nextStep(2)">
+                Next →
+            </button>
+
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="form-step" id="step2" hidden>
+
+            <h3>Problem Details</h3>
+
+            <textarea id="description"
+                placeholder="Describe your problem..."
+                required></textarea>
+
+            <input id="location" type="text"
+                placeholder="Enter Location" required>
+
+            <div class="step-buttons">
+
+                <button type="button" onclick="nextStep(1)">
+                    ← Back
+                </button>
+
+                <button type="button" onclick="nextStep(3)">
+                    Next →
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="form-step" id="step3" hidden>
+
+            <h3>Upload Complaint Photo</h3>
+
+            <p>Upload a photo of the public issue.</p>
+
+            <input id="photo" type="file"
+                accept="image/*">
+
+            <div class="step-buttons">
+
+                <button type="button" onclick="nextStep(2)">
+                    ← Back
+                </button>
+
+                <button type="submit">
+                    Submit Complaint
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <div id="message"></div>
+
+</section>
+
+<!-- COMPLAINT TRACKING -->
+<section class="container" id="track">
+
+    <h2>Complaint Tracking</h2>
+
+    <input id="searchId"
+        type="text"
+        placeholder="Enter Complaint ID">
+
+    <button type="button" onclick="trackComplaint()">
+        Track
+    </button>
+
+    <div id="trackResult"></div>
+
+</section>
+
+<!-- RECENT COMPLAINTS -->
+<section class="container">
+
+    <h2>Recent Complaints</h2>
+
+    <div class="table-wrapper">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Admin Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="complaintList"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<footer>
+    <p>© 2026 CivicTrack | Smart City Complaint Management</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

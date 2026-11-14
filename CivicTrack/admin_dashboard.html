@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CivicTrack - Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 11px 16px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout {
+            background: #ef4444;
+            color: white;
+        }
+
+        .refresh {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .container {
+            padding: 30px;
+            max-width: 1500px;
+            margin: auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 5px;
+        }
+
+        .welcome p {
+            color: #64748b;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 23px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            border-left: 5px solid #4f46e5;
+        }
+
+        .card h3 {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .card h2 {
+            font-size: 32px;
+            margin: 10px 0;
+            color: #1e3a8a;
+        }
+
+        .pending-card {
+            border-left-color: #f59e0b;
+        }
+
+        .progress-card {
+            border-left-color: #3b82f6;
+        }
+
+        .resolved-card {
+            border-left-color: #22c55e;
+        }
+
+        .table-box {
+            background: white;
+            padding: 25px;
+            margin-top: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        input, select {
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            outline: none;
+        }
+
+        input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .toolbar select {
+            min-width: 150px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #e0e7ff;
+            color: #1e3a8a;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-select {
+            width: 130px;
+        }
+
+        .update-btn {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .update-btn:hover {
+            background: #3730a3;
+        }
+
+        .priority {
+            font-weight: bold;
+        }
+
+        .critical {
+            color: #dc2626;
+        }
+
+        .high {
+            color: #ea580c;
+        }
+
+        .medium {
+            color: #ca8a04;
+        }
+
+        .low {
+            color: #16a34a;
+        }
+
+        #message {
+            margin-top: 15px;
+            color: #dc2626;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        @media(max-width: 900px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 550px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h2>🏙️ CivicTrack Admin</h2>
+
+    <div class="header-buttons">
+
+        <button class="refresh" onclick="loadComplaints()">
+            ↻ Refresh
+        </button>
+
+        <button class="logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div class="welcome">
+
+        <h2>Welcome, Administrator! 👋</h2>
+
+        <p>
+            Monitor, manage and resolve citizen complaints.
+        </p>
+
+    </div>
+
+
+    <!-- DASHBOARD STATISTICS -->
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>Total Complaints</h3>
+
+            <h2 id="total">0</h2>
+
+        </div>
+
+
+        <div class="card pending-card">
+
+            <h3>Pending Complaints</h3>
+
+            <h2 id="pending">0</h2>
+
+        </div>
+
+
+        <div class="card progress-card">
+
+            <h3>In Progress</h3>
+
+            <h2 id="progress">0</h2>
+
+        </div>
+
+
+        <div class="card resolved-card">
+
+            <h3>Resolved Complaints</h3>
+
+            <h2 id="resolved">0</h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPLAINT MANAGEMENT -->
+
+    <div class="table-box">
+
+        <h2>📋 Citizen Complaint Management</h2>
+
+        <p>Search and manage all citizen complaints.</p>
+
+
+        <!-- SEARCH AND FILTERS -->
+
+        <div class="toolbar">
+
+            <input
+                type="text"
+                id="search"
+                placeholder="🔍 Search ID or citizen name..."
+            >
+
+            <select id="categoryFilter">
+
+                <option value="">All Categories</option>
+
+            </select>
+
+
+            <select id="priorityFilter">
+
+                <option value="">All Priorities</option>
+                <option value="Critical">Critical</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+
+            </select>
+
+
+            <select id="statusFilter">
+
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- COMPLAINT TABLE -->
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Complaint ID</th>
+                        <th>Citizen Name</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Priority</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="complaintTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div id="message"></div>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    © 2026 CivicTrack | Smart Citizen Complaint Management System
+
+</footer>
+
+
+<script>
+
+let allComplaints = [];
+
+
+// LOAD COMPLAINTS
+
+async function loadComplaints() {
+
+    const message = document.getElementById("message");
+
+    message.textContent = "Loading complaints...";
+
+    try {
+
+        const response = await fetch("/api/complaints");
+
+        if (!response.ok) {
+            throw new Error("Unable to load complaints");
+        }
+
+        allComplaints = await response.json();
+
+        updateStatistics();
+
+        updateCategories();
+
+        displayComplaints();
+
+        message.textContent = "";
+
+    }
+
+    catch(error) {
+
+        message.textContent = error.message;
+
+    }
+
+}
+
+
+// UPDATE STATISTICS
+
+function updateStatistics() {
+
+    document.getElementById("total").textContent =
+        allComplaints.length;
+
+    document.getElementById("pending").textContent =
+        allComplaints.filter(c => c.status === "Pending").length;
+
+    document.getElementById("progress").textContent =
+        allComplaints.filter(c => c.status === "In Progress").length;
+
+    document.getElementById("resolved").textContent =
+        allComplaints.filter(c => c.status === "Resolved").length;
+
+}
+
+
+// UPDATE CATEGORY FILTER
+
+function updateCategories() {
+
+    const filter = document.getElementById("categoryFilter");
+
+    const selected = filter.value;
+
+    const categories = [
+        ...new Set(allComplaints.map(c => c.category).filter(Boolean))
+    ];
+
+    filter.innerHTML = '<option value="">All Categories</option>';
+
+    categories.forEach(category => {
+
+        const option = document.createElement("option");
+
+        option.value = category;
+        option.textContent = category;
+
+        filter.appendChild(option);
+
+    });
+
+    filter.value = categories.includes(selected) ? selected : "";
+
+}
+
+
+// DISPLAY COMPLAINTS
+
+function displayComplaints() {
+
+    const table = document.getElementById("complaintTable");
+
+    table.innerHTML = "";
+
+    const search = document.getElementById("search")
+        .value.toLowerCase();
+
+    const category = document.getElementById("categoryFilter").value;
+
+    const priority = document.getElementById("priorityFilter").value;
+
+    const status = document.getElementById("statusFilter").value;
+
+
+    const filtered = allComplaints.filter(c => {
+
+        const matchesSearch =
+            (c.complaint_id || "").toLowerCase().includes(search) ||
+            (c.name || "").toLowerCase().includes(search);
+
+        const matchesCategory =
+            !category || c.category === category;
+
+        const matchesPriority =
+            !priority || c.priority === priority;
+
+        const matchesStatus =
+            !status || c.status === status;
+
+        return matchesSearch &&
+            matchesCategory &&
+            matchesPriority &&
+            matchesStatus;
+
+    });
+
+
+    if (filtered.length === 0) {
+
+        const row = document.createElement("tr");
+
+        const cell = document.createElement("td");
+
+        cell.colSpan = 9;
+        cell.className = "empty";
+        cell.textContent = "No complaints found.";
+
+        row.appendChild(cell);
+
+        table.appendChild(row);
+
+        return;
+
+    }
+
+
+    filtered.forEach(c => {
+
+        const row = document.createElement("tr");
+
+        function addCell(value, className = "") {
+
+            const cell = document.createElement("td");
+
+            cell.textContent = value ?? "";
+
+            if (className) {
+                cell.className = className;
+            }
+
+            row.appendChild(cell);
+
+            return cell;
+
+        }
+
+
+        addCell(c.complaint_id);
+
+        addCell(c.name);
+
+        addCell(c.category);
+
+        addCell(c.description);
+
+        addCell(c.location);
+
+
+        const priorityClass =
+            (c.priority || "").toLowerCase();
+
+        addCell(
+            c.priority,
+            "priority " + priorityClass
+        );
+
+
+        let dateText = "Not available";
+
+        if (c.created_at) {
+
+            const date = new Date(c.created_at);
+
+            if (!isNaN(date.getTime())) {
+                dateText = date.toLocaleString();
+            }
+
+        }
+
+        addCell(dateText);
+
+
+        // STATUS SELECT
+
+        const statusCell = document.createElement("td");
+
+        const select = document.createElement("select");
+
+        select.className = "status-select";
+
+        select.id = "status-" + c.complaint_id;
+
+
+        ["Pending", "In Progress", "Resolved"].forEach(value => {
+
+            const option = document.createElement("option");
+
+            option.value = value;
+            option.textContent = value;
+            option.selected = c.status === value;
+
+            select.appendChild(option);
+
+        });
+
+
+        statusCell.appendChild(select);
+
+        row.appendChild(statusCell);
+
+
+        // UPDATE BUTTON
+
+        const actionCell = document.createElement("td");
+
+        const button = document.createElement("button");
+
+        button.textContent = "Update";
+
+        button.className = "update-btn";
+
+        button.addEventListener("click", () => {
+            updateStatus(c.complaint_id);
+        });
+
+        actionCell.appendChild(button);
+
+        row.appendChild(actionCell);
+
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+// UPDATE COMPLAINT STATUS
+
+async function updateStatus(id) {
+
+    const select = document.getElementById("status-" + id);
+
+    const status = select.value;
+
+    try {
+
+        const response = await fetch(
+            "/api/complaints/" + encodeURIComponent(id),
+            {
+                method: "PATCH",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({ status })
+            }
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+
+            alert("Complaint status updated successfully!");
+
+            await loadComplaints();
+
+        }
+
+        else {
+
+            alert(data.error || "Unable to update status");
+
+        }
+
+    }
+
+    catch(error) {
+
+        alert("Unable to connect to server.");
+
+    }
+
+}
+
+
+// SEARCH AND FILTER EVENTS
+
+document.getElementById("search")
+    .addEventListener("input", displayComplaints);
+
+document.getElementById("categoryFilter")
+    .addEventListener("change", displayComplaints);
+
+document.getElementById("priorityFilter")
+    .addEventListener("change", displayComplaints);
+
+document.getElementById("statusFilter")
+    .addEventListener("change", displayComplaints);
+
+
+// LOGOUT
+
+async function logout() {
+
+    try {
+
+        await fetch("/api/admin/logout", {
+            method: "POST"
+        });
+
+        window.location.href = "/admin";
+
+    }
+
+    catch(error) {
+
+        alert("Logout failed.");
+
+    }
+
+}
+
+
+// INITIAL LOAD
+
+loadComplaints();
+
+</script>
+
+</body>
+
+</html>

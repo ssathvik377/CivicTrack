@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Citizen Complaint System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #eef3f8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #174a7e;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #1769aa;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .complaint {
+            background: #f0f5fa;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 8px;
+        }
+
+        .resolved {
+            color: green;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Citizen Complaint System</h1>
+    <p>Report your local problems here.</p>
+
+    <form id="complaintForm">
+
+        <label>Citizen Name</label>
+        <input type="text" id="name"
+        placeholder="Enter your name" required>
+
+        <label>Complaint Category</label>
+        <select id="category">
+            <option>Road</option>
+            <option>Water</option>
+            <option>Electricity</option>
+            <option>Garbage</option>
+        </select>
+
+        <label>Complaint Description</label>
+        <textarea id="description"
+        placeholder="Describe your problem"
+        required></textarea>
+
+        <button type="submit">Submit Complaint</button>
+
+    </form>
+
+    <h2>Complaint List</h2>
+
+    <div id="complaintList"></div>
+
+</div>
+
+<script>
+
+    let complaints = JSON.parse(
+        localStorage.getItem("complaints")
+    ) || [];
+
+    const form = document.getElementById("complaintForm");
+    const list = document.getElementById("complaintList");
+
+    function displayComplaints() {
+
+        list.innerHTML = "";
+
+        complaints.forEach((c, index) => {
+
+            list.innerHTML += `
+                <div class="complaint">
+
+                <h3>${c.name}</h3>
+
+                <p>Category: ${c.category}</p>
+
+                <p>Description: ${c.description}</p>
+
+                <p>Priority: ${c.priority}</p>
+
+                <p class="${c.status === 'Resolved'
+                ? 'resolved' : 'pending'}">
+                Status: ${c.status}
+                </p>
+
+                ${c.status === "Pending" ?
+                `<button onclick="resolveComplaint(${index})">
+                Mark Resolved
+                </button>` : ""}
+
+                </div>
+            `;
+        });
+
+    }
+
+    form.addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+        let category =
+            document.getElementById("category").value;
+
+        let priority =
+            category === "Road" ||
+            category === "Electricity"
+            ? "High" : "Medium";
+
+        let complaint = {
+
+            name: document.getElementById("name").value,
+
+            category: category,
+
+            description:
+            document.getElementById("description").value,
+
+            priority: priority,
+
+            status: "Pending"
+
+        };
+
+        complaints.push(complaint);
+
+        localStorage.setItem(
+            "complaints",
+            JSON.stringify(complaints)
+        );
+
+        form.reset();
+
+        displayComplaints();
+
+        alert("Complaint submitted successfully!");
+
+    });
+
+    function resolveComplaint(index) {
+
+        complaints[index].status = "Resolved";
+
+        localStorage.setItem(
+            "complaints",
+            JSON.stringify(complaints)
+        );
+
+        displayComplaints();
+
+    }
+
+    displayComplaints();
+
+</script>
+
+</body>
+</html>
